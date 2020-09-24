@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container } from './styles.css';
 
-function WareHouse() {
+const WareHouse = () => {
   return <Container />;
 }
 

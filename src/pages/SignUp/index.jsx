@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container } from './styles.css';
 
-function SignUp() {
+const SignUp = () => {
   return <Container />;
 }
 
