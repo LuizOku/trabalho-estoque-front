@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const isAuthenticated = () => {
-  const loggedUser = localStorage.getItem('auth-trab');
+  const loggedUser = localStorage.getItem('auth-estoque');
   if (!loggedUser) {
     return false;
   }
@@ -12,12 +12,12 @@ const isAuthenticated = () => {
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={(props) =>
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
+        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+      )
     }
   />
 );
