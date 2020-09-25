@@ -8,8 +8,9 @@ import Location from '../pages/Location';
 import Product from '../pages/Product';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
-import Timeline from '../pages/Timeline';
+import Moviments from '../pages/Moviments';
 import WareHouse from '../pages/WareHouse';
+import NotFound from '../pages/NotFound';
 
 const Routes = () => (
   <BrowserRouter>
@@ -19,9 +20,9 @@ const Routes = () => (
       <PrivateRoute exact path="/branch" component={Branch} />
       <PrivateRoute exact path="/location" component={Location} />
       <PrivateRoute exact path="/product" component={Product} />
-      <PrivateRoute exact path="/timeline" component={Timeline} />
+      <PrivateRoute exact path="/moviments" component={Moviments} />
       <PrivateRoute exact path="/ware-house" component={WareHouse} />
-      <Route component={() => <h1>404</h1>} />
+      <Route component={NotFound} />
     </Switch>
   </BrowserRouter>
 );

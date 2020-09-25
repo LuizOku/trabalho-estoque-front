@@ -35,7 +35,7 @@ const SignIn = () => {
       const res = await api.post('user/login', data);
       if (res.data) {
         await localStorage.setItem('auth-estoque', res.data?.token);
-        history.push('timeline');
+        history.push('moviments');
       }
     } catch (err) {
       const validationErrors = {};
@@ -46,7 +46,9 @@ const SignIn = () => {
         formRef.current.setErrors(validationErrors);
       }
       if (err.response) {
-        addToast(err.response?.data?.error, { appearance: 'error' });
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
       }
     }
   };
