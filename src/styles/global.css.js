@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import colors from './colors';
 
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap');
@@ -13,6 +14,7 @@ export default createGlobalStyle`
   }
   body {
     font: 14px sans-serif;
+    background: ${() => colors.primary};
     color: #212121;
     -webkit-font-smoothing: antialiased !important;
   }
