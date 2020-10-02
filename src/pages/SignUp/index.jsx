@@ -53,7 +53,9 @@ const SignUp = () => {
         formRef.current.setErrors(validationErrors);
       }
       if (err.response) {
-        addToast(err.response?.data?.error, { appearance: 'error' });
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
       }
     }
   };

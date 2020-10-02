@@ -1,13 +1,10 @@
 import styled from 'styled-components';
+import ReactSelect from 'react-select';
 
-export const StyledInput = styled.input`
-  height: 40px;
+export const StyledSelect = styled(ReactSelect)`
+  height: 35px;
   width: 100%;
-  border-radius: 4px;
-  padding-left: 8px;
   margin: ${props => props.hasError ? '5px 0 0 0' : '5px 0'};
-  border: ${props =>
-    props.hasError ? '2px solid #D50000' : '1px solid rgb(204, 204, 204)'};
 `;
 
 export const ErrorSpan = styled.span`

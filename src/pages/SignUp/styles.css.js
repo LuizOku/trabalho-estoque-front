@@ -36,11 +36,6 @@ export const LoginBody = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
-  span {
-    margin-top: 10px;
-    text-align: center;
-    color: #d50000;
-  }
   a {
     margin-top: 10px;
     text-align: center;
