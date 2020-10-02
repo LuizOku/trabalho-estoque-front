@@ -35,7 +35,7 @@ const SignIn = () => {
       const res = await api.post('user/login', data);
       if (res.data) {
         await localStorage.setItem('auth-estoque', res.data?.token);
-        history.push('moviments');
+        history.push('movements');
       }
     } catch (err) {
       const validationErrors = {};

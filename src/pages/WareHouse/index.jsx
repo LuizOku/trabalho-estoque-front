@@ -218,7 +218,7 @@ const WareHouse = () => {
       </Body>
       <FabButton onClick={() => setBaloonOpen(!isBaloonOpen)}>+</FabButton>
       <BaloonModal
-        height="300px"
+        height="350px"
         isVisible={isBaloonOpen}
         title="Novo estoque"
         cancelAction={handleCloseAndReset}

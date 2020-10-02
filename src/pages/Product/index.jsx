@@ -99,8 +99,8 @@ const Product = () => {
   const getProducts = useCallback(async () => {
     try {
       const { data } = await api.get(`product/${selectedWareHouse}`);
-      if (data && data.product) {
-        setProducts(data.product);
+      if (data && data.products) {
+        setProducts(data.products);
       }
     } catch (err) {
       if (err.response) {

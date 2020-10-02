@@ -8,7 +8,7 @@ import Location from '../pages/Location';
 import Product from '../pages/Product';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
-import Moviments from '../pages/Moviments';
+import Movements from '../pages/Movements';
 import WareHouse from '../pages/WareHouse';
 import NotFound from '../pages/NotFound';
 
@@ -20,7 +20,7 @@ const Routes = () => (
       <PrivateRoute exact path="/branch" component={Branch} />
       <PrivateRoute exact path="/location" component={Location} />
       <PrivateRoute exact path="/product" component={Product} />
-      <PrivateRoute exact path="/moviments" component={Moviments} />
+      <PrivateRoute exact path="/movements" component={Movements} />
       <PrivateRoute exact path="/ware-house" component={WareHouse} />
       <Route component={NotFound} />
     </Switch>
