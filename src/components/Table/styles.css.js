@@ -5,7 +5,7 @@ import colors from '../../styles/colors';
 export const StyledTable = styled.table`
   text-align: left;
   overflow: hidden;
-  width: 80%;
+  width: 98%;
   display: table;
   color: #ffffff;
   border: 1px solid #ffffff;

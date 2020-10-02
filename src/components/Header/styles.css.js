@@ -4,6 +4,7 @@ import Button from '../Button';
 import colors from '../../styles/colors';
 
 export const Nav = styled.nav`
+  z-index: 10;
   height: 80px;
   display: flex;
   align-items: center;
