@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import Select from 'react-select';
-
 
 export const Container = styled.div`
   padding-top: 100px;

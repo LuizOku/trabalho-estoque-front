@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useToasts } from 'react-toast-notifications';
 
@@ -94,7 +94,7 @@ const Product = () => {
     if (selectedBranch && selectedLocation) {
       getWareHouses();
     }
-  }, [getLocations, selectedBranch, selectedLocation]);
+  }, [getWareHouses, selectedBranch, selectedLocation]);
 
   const getProducts = useCallback(async () => {
     try {
