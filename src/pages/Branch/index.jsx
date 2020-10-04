@@ -95,7 +95,7 @@ const Branch = () => {
       </Body>
       <FabButton onClick={() => setBaloonOpen(!isBaloonOpen)}>+</FabButton>
       <BaloonModal
-        height="200px"
+        height="220px"
         isVisible={isBaloonOpen}
         title="Nova filial"
         cancelAction={handleCloseAndReset}

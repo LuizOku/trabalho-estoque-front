@@ -20,14 +20,14 @@ export default function Header() {
         <Container>
           <MenuContainer>
             <Menu noOverlay>
-              <Link to="moviments">Movimentações</Link>
+              <Link to="movements">Movementações</Link>
               <Link to="branch">Filial</Link>
               <Link to="location">Localidade</Link>
               <Link to="ware-house">Estoque</Link>
               <Link to="product">Produto</Link>
             </Menu>
           </MenuContainer>
-          <Link to="moviments">
+          <Link to="movements">
             <img src={Logo} alt="" width={80} />
           </Link>
           <SignOutButton onClick={logOut}>SAIR</SignOutButton>
