@@ -6,7 +6,7 @@ import { Form } from '@unform/web';
 import { useToasts } from 'react-toast-notifications';
 
 import api from '../../services/api';
-import { Input } from '../../components';
+import { Input, CheckBox } from '../../components';
 import Logo from '../../assets/logo.png';
 
 import {
@@ -28,7 +28,11 @@ const SignUp = () => {
       const schema = Yup.object().shape({
         login: Yup.string().required('Login obrigatório'),
         password: Yup.string().required('Senha obrigatória'),
-        permissions: Yup.string().required('Permissões obrigatórias'),
+        permissions:
+          data?.is_client.length > 0
+            ? Yup.string()
+            : Yup.string().required('Permissões obrigatórias'),
+        is_client: Yup.array(),
       });
       await schema.validate(data, {
         abortEarly: false,
@@ -38,6 +42,7 @@ const SignUp = () => {
         permissions: data?.permissions?.split(',').map((per) => ({
           path: `/${per.trim()}`,
         })),
+        is_client: data?.is_client.length > 0,
       };
       const res = await api.post('user', formattedData);
       if (res.data) {
@@ -68,6 +73,16 @@ const SignUp = () => {
         </LoginHeader>
         <Form ref={formRef} onSubmit={handleSubmit}>
           <LoginBody>
+            <CheckBox
+              name="is_client"
+              options={[
+                {
+                  id: 'is_client',
+                  value: true,
+                  label: 'Sou cliente',
+                },
+              ]}
+            />
             <Input name="login" placeholder="Login" />
             <Input name="password" type="password" placeholder="Senha" />
             <Input

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
 
-import { InputContainer } from './styles.css';
+import { InputContainer, Container } from './styles.css';
 
 const Checkbox = ({ name, options, ...rest }) => {
   const inputRefs = useRef([]);
@@ -30,7 +30,7 @@ const Checkbox = ({ name, options, ...rest }) => {
   }, [defaultValue, fieldName, registerField]);
 
   return (
-    <div>
+    <Container>
       {options.map((option, index) => (
         <label htmlFor={option.id} key={option.id}>
           <InputContainer>
@@ -48,7 +48,7 @@ const Checkbox = ({ name, options, ...rest }) => {
           </InputContainer>
         </label>
       ))}
-    </div>
+    </Container>
   );
 };
 
