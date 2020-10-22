@@ -10,6 +10,7 @@ import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Movements from '../pages/Movements';
 import WareHouse from '../pages/WareHouse';
+import Campaign from '../pages/Campaign';
 import Ecommerce from '../pages/Ecommerce';
 import NotFound from '../pages/NotFound';
 
@@ -23,6 +24,7 @@ const Routes = () => (
       <PrivateRoute exact path="/product" component={Product} />
       <PrivateRoute exact path="/movements" component={Movements} />
       <PrivateRoute exact path="/ware-house" component={WareHouse} />
+      <PrivateRoute exact path="/campaign" component={Campaign} />
       <PrivateRoute exact path="/ecommerce" component={Ecommerce} />
       <Route component={NotFound} />
     </Switch>

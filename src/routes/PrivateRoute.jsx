@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const isAuthenticated = () => {
-  const loggedUser = localStorage.getItem('auth-estoque');
+const isAuthenticated = async () => {
+  const loggedUser = await localStorage.getItem('auth-estoque');
   if (!loggedUser) {
     return false;
   }

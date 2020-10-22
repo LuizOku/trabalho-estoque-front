@@ -3,7 +3,7 @@ import { useField } from '@unform/core';
 
 import { InputContainer, Container } from './styles.css';
 
-const Checkbox = ({ name, options, ...rest }) => {
+const Checkbox = ({ name, options, vertical, ...rest }) => {
   const inputRefs = useRef([]);
   const { fieldName, registerField, defaultValue = [] } = useField(name);
 
@@ -30,7 +30,7 @@ const Checkbox = ({ name, options, ...rest }) => {
   }, [defaultValue, fieldName, registerField]);
 
   return (
-    <Container>
+    <Container vertical={vertical}>
       {options.map((option, index) => (
         <label htmlFor={option.id} key={option.id}>
           <InputContainer>

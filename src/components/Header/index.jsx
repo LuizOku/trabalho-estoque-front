@@ -16,7 +16,7 @@ export default function Header() {
       const isClientStorage = await localStorage.getItem(
         'auth-estoque-is-client'
       );
-      if (isClientStorage) {
+      if (isClientStorage && isClientStorage === 'true') {
         setIsClient(true);
       }
     };
@@ -34,19 +34,20 @@ export default function Header() {
       <Nav>
         <Container>
           <MenuContainer>
-            <Menu noOverlay>
-              {isClient ? (
+            {isClient ? (
+              <Menu noOverlay>
                 <Link to="ecommerce">Ecommerce</Link>
-              ) : (
-                <>
-                  <Link to="movements">Movementações</Link>
-                  <Link to="branch">Filial</Link>
-                  <Link to="location">Localidade</Link>
-                  <Link to="ware-house">Estoque</Link>
-                  <Link to="product">Produto</Link>
-                </>
-              )}
-            </Menu>
+              </Menu>
+            ) : (
+              <Menu noOverlay>
+                <Link to="movements">Movementações</Link>
+                <Link to="branch">Filial</Link>
+                <Link to="location">Localidade</Link>
+                <Link to="ware-house">Estoque</Link>
+                <Link to="product">Produto</Link>
+                <Link to="campaign">Campanha</Link>
+              </Menu>
+            )}
           </MenuContainer>
           <Link to="movements">
             <img src={Logo} alt="" width={80} />
