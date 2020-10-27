@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 export const ModalContainer = styled.div`
   height: ${props => props.height || "350px"};
-  width: 250px;
+  width: 300px;
   background: #fff;
   border-radius: 9px 9px 0 9px;
   position: fixed;

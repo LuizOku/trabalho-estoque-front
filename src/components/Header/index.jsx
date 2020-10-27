@@ -46,6 +46,7 @@ export default function Header() {
                 <Link to="ware-house">Estoque</Link>
                 <Link to="product">Produto</Link>
                 <Link to="campaign">Campanha</Link>
+                <Link to="minimum-stock">Relatório de Estoque mínimo</Link>
               </Menu>
             )}
           </MenuContainer>

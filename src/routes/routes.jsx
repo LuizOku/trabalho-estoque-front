@@ -12,6 +12,7 @@ import Movements from '../pages/Movements';
 import WareHouse from '../pages/WareHouse';
 import Campaign from '../pages/Campaign';
 import Ecommerce from '../pages/Ecommerce';
+import MinimumStock from '../pages/MinimumStock';
 import NotFound from '../pages/NotFound';
 
 const Routes = () => (
@@ -25,6 +26,7 @@ const Routes = () => (
       <PrivateRoute exact path="/movements" component={Movements} />
       <PrivateRoute exact path="/ware-house" component={WareHouse} />
       <PrivateRoute exact path="/campaign" component={Campaign} />
+      <PrivateRoute exact path="/minimum-stock" component={MinimumStock} />
       <PrivateRoute exact path="/ecommerce" component={Ecommerce} />
       <Route component={NotFound} />
     </Switch>
