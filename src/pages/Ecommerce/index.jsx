@@ -158,12 +158,12 @@ const Ecommerce = () => {
   const addToCart = async (product) => {
     try {
       setShowLoader(true);
-      const { data } = await api.post('shopping-cart', {
+      const { status } = await api.post('shopping-cart', {
         product,
         quantity: 1,
       });
       setShowLoader(false);
-      if (data) {
+      if (status === 200) {
         addToast('Produto adicionado ao carrinho', {
           appearance: 'success',
         });
