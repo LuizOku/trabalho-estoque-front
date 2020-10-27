@@ -63,9 +63,34 @@ const Movements = () => {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState('');
   const [formSelectedBranch, setFormSelectedBranch] = useState('');
+  const [categories, setCategories] = useState([]);
   const formRef = useRef(null);
 
   const { addToast } = useToasts();
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const { data } = await api.get('category');
+        if (data && data.category) {
+          const formattedCategories = data.category.map((ct) => {
+            return {
+              label: ct.name,
+              value: ct._id,
+            };
+          });
+          setCategories(formattedCategories);
+        }
+      } catch (err) {
+        if (err.response) {
+          addToast(err.response?.data?.error || err.response?.data?.message, {
+            appearance: 'error',
+          });
+        }
+      }
+    };
+    getCategories();
+  }, [addToast]);
 
   const getBranches = useCallback(async () => {
     try {
@@ -220,6 +245,7 @@ const Movements = () => {
           'Quantidade obrigatória'
         ),
         productMovementPrice: Yup.string().required('Preço obrigatório'),
+        productMinimumInStock: Yup.string().required('Quantidade mínima obrigatória'),
         productMovementType: Yup.string().required(
           'Tipo de movementação obrigatória'
         ),
@@ -389,7 +415,7 @@ const Movements = () => {
       </Body>
       <FabButton onClick={() => setBaloonOpen(!isBaloonOpen)}>+</FabButton>
       <BaloonModal
-        height="750px"
+        height="800px"
         isVisible={isBaloonOpen}
         title="Nova Movementação"
         cancelAction={handleCloseAndReset}
@@ -419,8 +445,13 @@ const Movements = () => {
           />
           <SelectUnform
             name="productMovementType"
-            placeholder="Tipo de movementação"
+            placeholder="Tipo de movimentação"
             options={MOVEMENT_TYPES}
+          />
+          <SelectUnform
+            name="productCategory"
+            placeholder="Categoria"
+            options={categories}
           />
           <Input name="productName" placeholder="Nome do produto" />
           <Input name="productCode" placeholder="Código do produto" />
@@ -437,6 +468,11 @@ const Movements = () => {
           <Input
             name="productMovementQuantity"
             placeholder="Quantidade"
+            type="number"
+          />
+          <Input
+            name="productMinimumInStock"
+            placeholder="Quantidade mínima"
             type="number"
           />
           <Input

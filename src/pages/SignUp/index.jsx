@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useHistory, Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Form } from '@unform/web';
 import { useToasts } from 'react-toast-notifications';
 
 import api from '../../services/api';
-import { Input } from '../../components';
+import { Input, CheckBox, Loader } from '../../components';
 import Logo from '../../assets/logo.png';
 
 import {
@@ -21,6 +21,7 @@ const SignUp = () => {
   const formRef = useRef(null);
   const history = useHistory();
   const { addToast } = useToasts();
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleSubmit = async (data) => {
     try {
@@ -28,7 +29,11 @@ const SignUp = () => {
       const schema = Yup.object().shape({
         login: Yup.string().required('Login obrigatório'),
         password: Yup.string().required('Senha obrigatória'),
-        permissions: Yup.string().required('Permissões obrigatórias'),
+        permissions:
+          data?.is_client.length > 0
+            ? Yup.string()
+            : Yup.string().required('Permissões obrigatórias'),
+        is_client: Yup.array(),
       });
       await schema.validate(data, {
         abortEarly: false,
@@ -38,13 +43,17 @@ const SignUp = () => {
         permissions: data?.permissions?.split(',').map((per) => ({
           path: `/${per.trim()}`,
         })),
+        is_client: data?.is_client.length > 0,
       };
+      setShowLoader(true);
       const res = await api.post('user', formattedData);
+      setShowLoader(false);
       if (res.data) {
         addToast('Usuário criado com sucesso', { appearance: 'success' });
         history.push('/');
       }
     } catch (err) {
+      setShowLoader(false);
       const validationErrors = {};
       if (err instanceof Yup.ValidationError) {
         err.inner.forEach((error) => {
@@ -61,25 +70,38 @@ const SignUp = () => {
   };
 
   return (
-    <Container>
-      <LoginContainer>
-        <LoginHeader>
-          <img src={Logo} alt="logo" />
-        </LoginHeader>
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <LoginBody>
-            <Input name="login" placeholder="Login" />
-            <Input name="password" type="password" placeholder="Senha" />
-            <Input
-              name="permissions"
-              placeholder="Permissões (p1, p2, p3...)"
-            />
-            <StyledButton type="submit">Cadastrar</StyledButton>
-            <Link to="/">Já tenho conta, entrar</Link>
-          </LoginBody>
-        </Form>
-      </LoginContainer>
-    </Container>
+    <>
+      <Loader showLoader={showLoader} />
+      <Container>
+        <LoginContainer>
+          <LoginHeader>
+            <img src={Logo} alt="logo" />
+          </LoginHeader>
+          <Form ref={formRef} onSubmit={handleSubmit}>
+            <LoginBody>
+              <CheckBox
+                name="is_client"
+                options={[
+                  {
+                    id: 'is_client',
+                    value: true,
+                    label: 'Sou cliente',
+                  },
+                ]}
+              />
+              <Input name="login" placeholder="Login" />
+              <Input name="password" type="password" placeholder="Senha" />
+              <Input
+                name="permissions"
+                placeholder="Permissões (p1, p2, p3...)"
+              />
+              <StyledButton type="submit">Cadastrar</StyledButton>
+              <Link to="/">Já tenho conta, entrar</Link>
+            </LoginBody>
+          </Form>
+        </LoginContainer>
+      </Container>
+    </>
   );
 };
 

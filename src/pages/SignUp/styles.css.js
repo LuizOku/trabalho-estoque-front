@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 export const LoginContainer = styled.div`
   width: 450px;
-  height: 500px;
+  height: 550px;
   padding: 0 70px;
   background: #fff;
   display: flex;

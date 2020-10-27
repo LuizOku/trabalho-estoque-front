@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 
 export const StyledFabButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 60px;
   width: 60px;
   background: ${() => colors.secondary};
