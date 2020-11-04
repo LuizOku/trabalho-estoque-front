@@ -19,6 +19,7 @@ import {
   AddCartButton,
   CartFooter,
   CheckoutCartButton,
+  CancelCartButton,
 } from './styles.css';
 
 const productsMock = [
@@ -49,6 +50,7 @@ const Ecommerce = () => {
   const [products, setProducts] = useState([]);
   const [productsOnCart, setProductsOnCart] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+  const [shoppingCartId, setShoppingCartId] = useState('');
 
   const getAllProducts = useCallback(async () => {
     try {
@@ -130,29 +132,26 @@ const Ecommerce = () => {
 
   const getProductsOnCart = async () => {
     setShowLoader(true);
-    setTimeout(() => {
+    try {
+      const { data } = await api.get('active-shopping-cart');
       setShowLoader(false);
+      if (data && data.shoppingCart && data.shoppingCart.length > 0) {
+        setProductsOnCart(data.shoppingCart[0].productsQuantity);
+        setShoppingCartId(data.shoppingCart[0]._id);
+      } else {
+        setProductsOnCart([]);
+        setShoppingCartId('');
+      }
       setCartOpen(true);
-    }, 1000);
-
-    // setShowLoader(true);
-    // try {
-    //   const { data } = await api.get('shopping-cart');
-    //   setShowLoader(false);
-    //   if (data && data.products && data.products.productsQuantity) {
-    //     setProductsOnCart(data.products.productsQuantity);
-    //   }
-    //   setProductsOnCart([]);
-    //   setCartOpen(true);
-    // } catch (err) {
-    //   setProductsOnCart([]);
-    //   setShowLoader(false);
-    //   if (err.response) {
-    //     addToast(err.response?.data?.error || err.response?.data?.message, {
-    //       appearance: 'error',
-    //     });
-    //   }
-    // }
+    } catch (err) {
+      setProductsOnCart([]);
+      setShowLoader(false);
+      if (err.response) {
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
+      }
+    }
   };
 
   const addToCart = async (product) => {
@@ -198,39 +197,69 @@ const Ecommerce = () => {
     }
   };
 
+  const cancelProductsOnCart = async () => {
+    setShowLoader(true);
+    try {
+      const { data } = await api.patch(
+        `shopping-cart/deactivate/${shoppingCartId}`
+      );
+      setShowLoader(false);
+      if (data) {
+        setCartOpen(false);
+        setProductsOnCart([]);
+        setShoppingCartId('');
+        addToast('Compra cancelada com sucesso', {
+          appearance: 'success',
+        });
+      }
+    } catch (err) {
+      setShowLoader(false);
+      if (err.response) {
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
+      }
+    }
+  };
+
   return (
     <>
       <Modal
         open={isCartOpen}
         width={500}
         height={500}
-        title="Carrinho"
+        title={shoppingCartId ? 'Carrinho' : 'Carrinho está vazio'}
         handleClose={() => setCartOpen(false)}
       >
-        {productsMock &&
-          productsMock.map((pr) => (
-            <ProductCard key={pr?.product?._id} isCart>
+        {productsOnCart &&
+          productsOnCart.map((pr) => (
+            <ProductCard key={pr._id} isCart>
               <CardHeader>
-                <h3>{pr?.product?.name}</h3>
-                <span>R$ {pr?.quantity * pr?.product?.calculatedPrice}</span>
+                <h3>{pr.product.name}</h3>
+                <span>R$ {pr.quantity * pr.product.calculatedPrice}</span>
               </CardHeader>
               <CardBody>
                 <p>
                   <b>Quantidade: </b>
-                  {pr?.quantity}
+                  {pr.quantity}
                 </p>
                 <p>
                   <b>Preço unidade: </b>
-                  {pr?.product?.calculatedPrice}
+                  {pr.product.calculatedPrice}
                 </p>
               </CardBody>
             </ProductCard>
           ))}
-        <CartFooter>
-          <CheckoutCartButton onClick={checkoutProductsOnCart}>
-            Finalizar compra
-          </CheckoutCartButton>
-        </CartFooter>
+        {shoppingCartId && (
+          <CartFooter>
+            <CheckoutCartButton onClick={checkoutProductsOnCart}>
+              Finalizar compra
+            </CheckoutCartButton>
+            <CancelCartButton onClick={cancelProductsOnCart}>
+              Cancelar compra
+            </CancelCartButton>
+          </CartFooter>
+        )}
       </Modal>
       <Loader showLoader={showLoader} />
       <Container>

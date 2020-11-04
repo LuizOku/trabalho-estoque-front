@@ -5,7 +5,7 @@ import { ToastProvider } from 'react-toast-notifications';
 
 
 const App = () => (
-  <ToastProvider placement="bottom-right">
+  <ToastProvider placement="bottom-right" autoDismiss autoDismissTimeout={3000}>
     <Routes />
     <GlobalStyle />
   </ToastProvider>
