@@ -19,6 +19,7 @@ export const ModalContainer = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
+  overflow: auto;
   h1 {
     align-self: center;
   }

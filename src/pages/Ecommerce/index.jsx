@@ -4,8 +4,9 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
 
 import api from '../../services/api';
-import { Header, FabButton, Modal, Loader } from '../../components';
+import { Header, FabButton, Loader } from '../../components';
 
+import ModalCart from './ModalCart';
 import {
   Container,
   Body,
@@ -17,31 +18,7 @@ import {
   CardBody,
   CardFooter,
   AddCartButton,
-  CartFooter,
-  CheckoutCartButton,
-  CancelCartButton,
 } from './styles.css';
-
-const productsMock = [
-  {
-    product: {
-      _id: '912n01m',
-      name: 'Arroz',
-      code: '020212',
-      calculatedPrice: 10.5,
-    },
-    quantity: 12,
-  },
-  {
-    product: {
-      _id: '19031n',
-      name: 'Feijao',
-      code: '130284',
-      calculatedPrice: 12.5,
-    },
-    quantity: 10,
-  },
-];
 
 const Ecommerce = () => {
   const { addToast } = useToasts();
@@ -177,12 +154,15 @@ const Ecommerce = () => {
     }
   };
 
-  const checkoutProductsOnCart = async () => {
+  const checkoutProductsOnCart = async (obj) => {
     setShowLoader(true);
     try {
-      const { data } = await api.post('checkout');
+      const { data } = await api.post('checkout', obj);
       setShowLoader(false);
       if (data) {
+        setCartOpen(false);
+        setProductsOnCart([]);
+        setShoppingCartId('');
         addToast('Compra realizada com sucesso', {
           appearance: 'success',
         });
@@ -224,43 +204,14 @@ const Ecommerce = () => {
 
   return (
     <>
-      <Modal
-        open={isCartOpen}
-        width={500}
-        height={500}
-        title={shoppingCartId ? 'Carrinho' : 'Carrinho está vazio'}
-        handleClose={() => setCartOpen(false)}
-      >
-        {productsOnCart &&
-          productsOnCart.map((pr) => (
-            <ProductCard key={pr._id} isCart>
-              <CardHeader>
-                <h3>{pr.product.name}</h3>
-                <span>R$ {pr.quantity * pr.product.calculatedPrice}</span>
-              </CardHeader>
-              <CardBody>
-                <p>
-                  <b>Quantidade: </b>
-                  {pr.quantity}
-                </p>
-                <p>
-                  <b>Preço unidade: </b>
-                  {pr.product.calculatedPrice}
-                </p>
-              </CardBody>
-            </ProductCard>
-          ))}
-        {shoppingCartId && (
-          <CartFooter>
-            <CheckoutCartButton onClick={checkoutProductsOnCart}>
-              Finalizar compra
-            </CheckoutCartButton>
-            <CancelCartButton onClick={cancelProductsOnCart}>
-              Cancelar compra
-            </CancelCartButton>
-          </CartFooter>
-        )}
-      </Modal>
+      <ModalCart
+        isCartOpen={isCartOpen}
+        shoppingCartId={shoppingCartId}
+        productsOnCart={productsOnCart}
+        checkoutProductsOnCart={checkoutProductsOnCart}
+        cancelProductsOnCart={cancelProductsOnCart}
+        setCartOpen={setCartOpen}
+      />
       <Loader showLoader={showLoader} />
       <Container>
         <Header />
