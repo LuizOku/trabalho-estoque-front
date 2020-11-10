@@ -4,8 +4,9 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
 
 import api from '../../services/api';
-import { Header, FabButton, Modal, Loader } from '../../components';
+import { Header, FabButton, Loader } from '../../components';
 
+import ModalCart from './ModalCart';
 import {
   Container,
   Body,
@@ -17,30 +18,7 @@ import {
   CardBody,
   CardFooter,
   AddCartButton,
-  CartFooter,
-  CheckoutCartButton,
 } from './styles.css';
-
-const productsMock = [
-  {
-    product: {
-      _id: '912n01m',
-      name: 'Arroz',
-      code: '020212',
-      calculatedPrice: 10.5,
-    },
-    quantity: 12,
-  },
-  {
-    product: {
-      _id: '19031n',
-      name: 'Feijao',
-      code: '130284',
-      calculatedPrice: 12.5,
-    },
-    quantity: 10,
-  },
-];
 
 const Ecommerce = () => {
   const { addToast } = useToasts();
@@ -49,6 +27,7 @@ const Ecommerce = () => {
   const [products, setProducts] = useState([]);
   const [productsOnCart, setProductsOnCart] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+  const [shoppingCartId, setShoppingCartId] = useState('');
 
   const getAllProducts = useCallback(async () => {
     try {
@@ -88,9 +67,9 @@ const Ecommerce = () => {
 
   const getRecommendedProducts = useCallback(async () => {
     try {
-      const { data } = await api.get('recommended');
-      if (data && data.recommended) {
-        setProducts(data.recommended);
+      const { data } = await api.get('recommendedProduct');
+      if (data && data.productsRecommended) {
+        setProducts(data.productsRecommended);
       } else {
         setProducts([]);
       }
@@ -130,40 +109,37 @@ const Ecommerce = () => {
 
   const getProductsOnCart = async () => {
     setShowLoader(true);
-    setTimeout(() => {
+    try {
+      const { data } = await api.get('active-shopping-cart');
       setShowLoader(false);
+      if (data && data.shoppingCart && data.shoppingCart.length > 0) {
+        setProductsOnCart(data.shoppingCart[0].productsQuantity);
+        setShoppingCartId(data.shoppingCart[0]._id);
+      } else {
+        setProductsOnCart([]);
+        setShoppingCartId('');
+      }
       setCartOpen(true);
-    }, 1000);
-
-    // setShowLoader(true);
-    // try {
-    //   const { data } = await api.get('shopping-cart');
-    //   setShowLoader(false);
-    //   if (data && data.products && data.products.productsQuantity) {
-    //     setProductsOnCart(data.products.productsQuantity);
-    //   }
-    //   setProductsOnCart([]);
-    //   setCartOpen(true);
-    // } catch (err) {
-    //   setProductsOnCart([]);
-    //   setShowLoader(false);
-    //   if (err.response) {
-    //     addToast(err.response?.data?.error || err.response?.data?.message, {
-    //       appearance: 'error',
-    //     });
-    //   }
-    // }
+    } catch (err) {
+      setProductsOnCart([]);
+      setShowLoader(false);
+      if (err.response) {
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
+      }
+    }
   };
 
   const addToCart = async (product) => {
     try {
       setShowLoader(true);
-      const { data } = await api.post('shopping-cart', {
+      const { status } = await api.post('shopping-cart', {
         product,
         quantity: 1,
       });
       setShowLoader(false);
-      if (data) {
+      if (status === 200) {
         addToast('Produto adicionado ao carrinho', {
           appearance: 'success',
         });
@@ -178,13 +154,41 @@ const Ecommerce = () => {
     }
   };
 
-  const checkoutProductsOnCart = async () => {
+  const checkoutProductsOnCart = async (obj) => {
     setShowLoader(true);
     try {
-      const { data } = await api.post('checkout');
+      const { data } = await api.post('checkout', obj);
       setShowLoader(false);
       if (data) {
+        setCartOpen(false);
+        setProductsOnCart([]);
+        setShoppingCartId('');
         addToast('Compra realizada com sucesso', {
+          appearance: 'success',
+        });
+      }
+    } catch (err) {
+      setShowLoader(false);
+      if (err.response) {
+        addToast(err.response?.data?.error || err.response?.data?.message, {
+          appearance: 'error',
+        });
+      }
+    }
+  };
+
+  const cancelProductsOnCart = async () => {
+    setShowLoader(true);
+    try {
+      const { data } = await api.patch(
+        `shopping-cart/deactivate/${shoppingCartId}`
+      );
+      setShowLoader(false);
+      if (data) {
+        setCartOpen(false);
+        setProductsOnCart([]);
+        setShoppingCartId('');
+        addToast('Compra cancelada com sucesso', {
           appearance: 'success',
         });
       }
@@ -200,38 +204,14 @@ const Ecommerce = () => {
 
   return (
     <>
-      <Modal
-        open={isCartOpen}
-        width={500}
-        height={500}
-        title="Carrinho"
-        handleClose={() => setCartOpen(false)}
-      >
-        {productsMock &&
-          productsMock.map((pr) => (
-            <ProductCard key={pr?.product?._id} isCart>
-              <CardHeader>
-                <h3>{pr?.product?.name}</h3>
-                <span>R$ {pr?.quantity * pr?.product?.calculatedPrice}</span>
-              </CardHeader>
-              <CardBody>
-                <p>
-                  <b>Quantidade: </b>
-                  {pr?.quantity}
-                </p>
-                <p>
-                  <b>Preço unidade: </b>
-                  {pr?.product?.calculatedPrice}
-                </p>
-              </CardBody>
-            </ProductCard>
-          ))}
-        <CartFooter>
-          <CheckoutCartButton onClick={checkoutProductsOnCart}>
-            Finalizar compra
-          </CheckoutCartButton>
-        </CartFooter>
-      </Modal>
+      <ModalCart
+        isCartOpen={isCartOpen}
+        shoppingCartId={shoppingCartId}
+        productsOnCart={productsOnCart}
+        checkoutProductsOnCart={checkoutProductsOnCart}
+        cancelProductsOnCart={cancelProductsOnCart}
+        setCartOpen={setCartOpen}
+      />
       <Loader showLoader={showLoader} />
       <Container>
         <Header />

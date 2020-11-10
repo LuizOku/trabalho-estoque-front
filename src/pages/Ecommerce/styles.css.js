@@ -94,17 +94,4 @@ export const AddCartButton = styled(Button)`
   background: ${() => colors.tertiary}
 `;
 
-export const CartFooter = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-`;
-
-export const CheckoutCartButton = styled(Button)`
-  margin: 0px;
-  width: 200px;
-  background: ${() => colors.secondary}
-`;
-
 

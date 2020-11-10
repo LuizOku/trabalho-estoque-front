@@ -1,6 +1,7 @@
 export { default as Button } from './Button';
 export { default as Input } from './Input';
 export { default as SelectUnform } from './SelectUnform';
+export { default as InputCommon } from './InputCommon';
 export { default as Select } from './Select';
 export { default as CheckBox } from './CheckBox';
 export { default as Header } from './Header';
