@@ -67,9 +67,9 @@ const Ecommerce = () => {
 
   const getRecommendedProducts = useCallback(async () => {
     try {
-      const { data } = await api.get('recommended');
-      if (data && data.recommended) {
-        setProducts(data.recommended);
+      const { data } = await api.get('recommendedProduct');
+      if (data && data.productsRecommended) {
+        setProducts(data.productsRecommended);
       } else {
         setProducts([]);
       }

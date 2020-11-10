@@ -37,10 +37,13 @@ const ModalCart = ({
 
   const handleCheckout = async () => {
     const data = {
-      isBankSlip: selectedPaymentType === 'slip',
+      isBankslip: selectedPaymentType === 'slip',
       cardHash,
       shoppingCartId,
     };
+    if (!data.cardHash) {
+      delete data.cardHash;
+    }
     await checkoutProductsOnCart(data);
     setSelectedPaymentType('slip');
     setCardHash('');
